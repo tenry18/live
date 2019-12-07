@@ -11,6 +11,7 @@
 
 ###一.基本信息:  
 
+
 1.入门推荐书籍:  
 * [FFmpeg从入门到精通](https://book.douban.com/subject/30178432/)
 * [Swoole从入门到精通](https://wiki.swoole.com/wiki/page/1.html)
@@ -30,6 +31,7 @@
     3.  php easwswoole start    
     
 ###一.HTTP API接口  
+
 ***  
 1.添加设备
 
@@ -59,5 +61,6 @@
     
     
 ###二.观看  
+
 ***  
     rtmp://服务器ip:1935/{app}/{stream}
