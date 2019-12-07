@@ -6,7 +6,8 @@
 * 同步录制  
 * 多级集群  
 
-更多支持请参阅 https://github.com/ossrs/srs/wiki/v2_CN_Home
+更多支持请参阅 https://github.com/ossrs/srs/wiki/v2_CN_Home  
+
 ###一.基本信息:
 1.入门推荐书籍:  
 * [FFmpeg从入门到精通](https://book.douban.com/subject/30178432/)
