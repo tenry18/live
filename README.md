@@ -6,9 +6,11 @@
 * 同步录制  
 * 多级集群  
 
-更多支持请参阅 https://github.com/ossrs/srs/wiki/v2_CN_Home  
+更多支持请参阅  
+ https://github.com/ossrs/srs/wiki/v2_CN_Home  
 
-###一.基本信息:
+###一.基本信息:  
+
 1.入门推荐书籍:  
 * [FFmpeg从入门到精通](https://book.douban.com/subject/30178432/)
 * [Swoole从入门到精通](https://wiki.swoole.com/wiki/page/1.html)
@@ -27,8 +29,8 @@
     2.  php easyswoole install_srs
     3.  php easwswoole start    
     
-###一.HTTP API接口
-***
+###一.HTTP API接口  
+***  
 1.添加设备
 
     POST  http://服务器ip:服务端口/api/create 
@@ -56,6 +58,6 @@
     }
     
     
-###二.观看
-***
+###二.观看  
+***  
     rtmp://服务器ip:1935/{app}/{stream}
