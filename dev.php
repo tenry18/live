@@ -8,10 +8,12 @@ return [
         'SOCK_TYPE' => SWOOLE_TCP,
         'RUN_MODEL' => SWOOLE_PROCESS,
         'SETTING' => [
-            'worker_num' => swoole_cpu_num(),
+            'worker_num' => 1,
             'reload_async' => true,
             'max_wait_time'=>3,
-            'enable_coroutine'=>true
+            'enable_coroutine'=>true,
+            'enable_static_handler'=>true,//静态文件处理
+            'document_root' => EASYSWOOLE_ROOT.'/public', //静态文件目录 v4.4.0以下版本, 此处必须为绝对路径
         ],
         'TASK'=>[
             'workerNum'=>0,

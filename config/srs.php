@@ -29,6 +29,11 @@ return [
             'listen'=>'1936;',//监听端口
             'crossdomain'=>'off;',//跨域请求  on|off
         ],
+        'http_server'=>[//是否启用HTTP Server 配合http_remux使用
+            'enabled'=>'off;',// on|off
+            'listen'=>'8080;',//监听端口
+            'dir'=>EASYSWOOLE_ROOT.'/public;',
+        ],
         //从其他协议到SRS的RTMP流。
         'stream_caster'=>[
             'enabled'=>'off;',// on|off
@@ -86,9 +91,15 @@ return [
                 'on_hls'=>$host.'/onHls'.$debug.';',//{"action": "on_hls","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","stream": "livestream","duration": 9.36, // in seconds"cwd": "/usr/local/srs","file": "./objs/nginx/html/live/livestream/2015-04-23/01/476584165.ts","url": "live/livestream/2015-04-23/01/476584165.ts","m3u8": "./objs/nginx/html/live/livestream/live.m3u8","m3u8_url": "live/livestream/live.m3u8","seq_no": 100}
                 'on_hls_notify'=>$host.'/onHlsNotify'.$debug.';',//当切片生成时，回调这个url，使用GET回调
             ],
-            'dvr'=>[//srs将流录制成flv文件，这个功能编译的时候要加–with-dvr选项
+            'http_remux'=>[//HTTP FLV
+                'enabled'=>'off;',//是否启用
+                'fast_cache'=>'0;',//音频流（mp3/aac）的快速缓存,0为禁用
+                'mount'  =>'[vhost]/[app]/[stream].flv;',// http的端口由http_server部分指定
+                'hstrs'  =>'on;',
+            ],
+            'dvr'=>[//srs将流 录制 成flv文件
                 'enabled'=>'off;',
-                'dvr_path'=>'./objs/nginx/html/[app]/[stream].[timestamp].flv;',
+                'dvr_path'=>EASYSWOOLE_ROOT.'/public/[app]/[stream].[timestamp].flv;',
                 'dvr_plan'=>'session;',
                 'dvr_duration'=>'30;',
                 'dvr_wait_keyframe'=>'on;',
@@ -107,7 +118,7 @@ return [
                  */
                 'hls_td_ratio'=>'1.5;',
                 'hls_aof_ratio'=>'2.0;',//倍数。纯音频时，当ts时长超过配置的ls_fragment乘以这个系数时就切割文件。例如，当ls_fragment是10秒，hls_aof_ratio是2.0时，对于纯音频，10s*2.0=20秒时就切割ts文件。
-                'hls_window'=>'15;',//单位：秒，指定HLS窗口大小，即m3u8中ts文件的时长之和，超过总时长后，丢弃第一个m3u8中的第一个切片，直到ts的总时长在这个配置项范围之内。即SRS保证：hls_window的值必须大于等于m3u8列表文件中所有ts切片时长的总和。
+                'hls_window'=>'10;',//单位：秒，指定HLS窗口大小，即m3u8中ts文件的时长之和，超过总时长后，丢弃第一个m3u8中的第一个切片，直到ts的总时长在这个配置项范围之内。即SRS保证：hls_window的值必须大于等于m3u8列表文件中所有ts切片时长的总和。
                 'hls_on_error'=>'ignore;',// 错误策略 ignore：当错误发生时，忽略错误并停止输出hls（默认） disconnect：当发生错误时，断开推流连接 continue：当发生错误时，忽略错误并继续输出hls
                 'hls_storage'=>'disk;',//存储方式 disk：把m3u8/ts写到磁盘 发送m3u8/ts到内存，但是必须使用srs自带的http server进行分发。  both， disk and ram。
                 'hls_path'=>EASYSWOOLE_ROOT.'/public/hls'.';',//当hls写到磁盘时，指定写入的目录。
@@ -115,7 +126,7 @@ return [
                 'hls_ts_file'=>'[app]/[stream]/[stream]-[seq].ts;',//m3u8文件的绝对路径为[SRS_Path]/objs/nginx/html/[app]/[stream].m3u8
                 'hls_ts_floor'=>'off;',//是否使用floor的方式生成hls ts文件的路径。如实hls_ts_floor on; 使用timestamp/hls_fragment作为[timestamp]变量，即[timestamp]=timestamp/hls_fragment，并且使用enahanced算法生成下一个切片的差值。
                 'hls_mount'=>'[vhost]/[app]/[stream].m3u8;',//内存HLS的M3u8/ts挂载点，和http_remux的mount含义一样
-                'hls_acodec'=>'aac;',//默认的音频编码。当流的编码改变时，会更新PMT/PAT信息；默认是aac，因此默认的PMT/PAT信息是aac；如果流是mp3，那么可以配置这个参数为mp3，避免PMT/PAT改变。
+                'hls_acodec'=>'libfdk_aac;',//默认的音频编码。当流的编码改变时，会更新PMT/PAT信息；默认是aac，因此默认的PMT/PAT信息是aac；如果流是mp3，那么可以配置这个参数为mp3，避免PMT/PAT改变。
                 'hls_vcodec'=>'h264;',//默认的视频编码。当流的编码改变时，会更新PMT/PAT信息；默认是h264。如果是纯音频HLS，可以配置为vn，可以减少SRS检测纯音频的时间，直接进入纯音频模式。
                 'hls_cleanup'=>'on;',//是否删除过期的ts切片，不在hls_window中就是过期。可以关闭清除ts切片，实现时移和存储，使用自己的切片管理系统。
                 'hls_nb_notify'=>'64;',//从notify服务器读取数据的长度
