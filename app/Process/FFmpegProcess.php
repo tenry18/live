@@ -37,15 +37,15 @@ class FFmpegProcess extends AbstractProcess
      */
     private function pullStream(string $stream_key)
     {
-        $row=Stream::get($stream_key);
-        $ffmpegProcess=new Process(function (Process $process)use($row){
+        $ffmpegProcess=new Process(function (Process $process)use($stream_key){
+            $row=Stream::get($stream_key);
             $instance=\EasySwoole\EasySwoole\Config::getInstance();
             $ffmpeg = FFMpeg::create([
                 'ffmpeg.binaries'  => $instance->getConf('srs.srs_path').'/objs/ffmpeg/bin/ffmpeg',
                 'ffprobe.binaries' => $instance->getConf('srs.srs_path').'/objs/ffmpeg/bin/ffprobe',
-                'timeout'=>'0',
+                'timeout'=>0,
+                'ffmpeg.threads'   => swoole_cpu_num(),   //FFMpeg应该使用的线程数
             ]);
-
             $video = $ffmpeg->open($row['rtsp_host']);
             $video_format=$video->getFormat()->all();
             $video_info=$video->getStreams()->videos()->first()->all();
@@ -57,11 +57,11 @@ class FFmpegProcess extends AbstractProcess
                 ->setAudioChannels($audio_info['channels'])   // 声道设置，1单声道，2双声道，3立体声
 //                ->setAudioKiloBitrate($audio_bit_rate)//音频比特率
                 ->setAudioCodec('libfdk_aac')
-                ->setAdditionalParameters(['-vf','scale=-2:480','-f','flv']);//'-an'
+                ->setAdditionalParameters(['-tune','zerolatency','-preset','ultrafast','-vf','scale=-2:480','-f','flv']);//'-an'
             //此代码阻塞
             $instance=\EasySwoole\EasySwoole\Config::getInstance();
             $video->save($format, "rtmp://127.0.0.1:{$instance->getConf('srs.rtmp_port')}/".$row['app']."/".$row['stream_id']);
-        },true,SOCK_STREAM,false);
+        },false,SOCK_STREAM,false);
         if (($phpProcessPid=$ffmpegProcess->start())===false){return false;}
         $streamTable=TableManager::getInstance()->get('stream');
         $streamTable->set($stream_key,['php_pid'=>$phpProcessPid]);

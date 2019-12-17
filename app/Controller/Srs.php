@@ -83,6 +83,8 @@ class Srs extends BC
             dump(__FUNCTION__);
             $data=json_decode($this->raw(),true);
             if(empty($data)){throw new \Exception();}
+//            $streamTable=TableManager::getInstance()->get('stream');
+//            $streamTable->set(stream_key($data['app'],$data['stream']),['php_pid'=>$phpProcessPid]);
             $this->retSrs();
         }catch (\Exception $exception){
             $this->retSrs(SRS_ERROR);
@@ -116,7 +118,6 @@ class Srs extends BC
             dump(__FUNCTION__);
             $data=json_decode($this->raw(),true);
             if(empty($data)||!Stream::exists(stream_key($data['app'],$data['stream']))){throw new \Exception();}
-
             //发送到 自定义ffmpeg进程
             if (ServerManager::getInstance()->getProcess('ffmpeg')->write(stream_key($data['app'],$data['stream']))===false) {throw new \Exception();}
 

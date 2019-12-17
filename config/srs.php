@@ -1,11 +1,10 @@
 <?php
 
 $host='http://127.0.0.1:8080/srs';//不要瞎改
-$debug="";
 $rtmp_port='1935';
 return [
     //srs 安装路径
-    'srs_path'=>'/www/wwwroot/util/srs/srs2.0',
+    'srs_path'=>EASYSWOOLE_ROOT.'/storage/setup/srs',
     'rtmp_port'=>$rtmp_port,
     //srs 配置文件
     'srs_config'=>[
@@ -20,7 +19,7 @@ return [
         'heartbeat'=>[//心跳
             'enabled'=>'off;',// on|off
             'interval'=>'3;',//心跳的间隔秒 0.3的倍数
-            'url'=>$host.'/heartbeat'.$debug.';',//必须是一个restful的HTTP API URL, 数据:{"device_id": "my-srs-device","ip": "192.168.1.100"}
+            'url'=>$host.'/heartbeat;',//必须是一个restful的HTTP API URL, 数据:{"device_id": "my-srs-device","ip": "192.168.1.100"}
             'device_id'=>'master;',//这个设备的id
             'summaries'=>'off;'//是否有摘要报告 数据:{"summaries": summaries object.}
         ],
@@ -81,15 +80,15 @@ return [
             'tcp_nodelay'=>'on;',
             'http_hooks'=>[//http回调post请求  服务器必须返回HTTP代码200(Stauts OK) 和响应头 错误码是int型 0代表成功
                 'enabled'=>'on;',
-                'on_connect'=>$host.'/onConnect'.$debug.';',//客户端连接到指定的vhost和app时 {"action": "on_connect","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","tcUrl": "rtmp://video.test.com/live?key=d2fa801d08e3f90ed1e1670e6e52651a", "pageUrl": "http://www.test.com/live.html"}
-                'on_close'=>$host.'/onClose'.$debug.';',//关闭连接，或者SRS主动关闭连接 {"action": "on_close", "client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","send_bytes": 10240, "recv_bytes": 10240}
-                'on_publish'=>$host.'/onPublish'.$debug.';',//当客户端发布流时  {"action": "on_publish","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","stream": "livestream" }
-                'on_unpublish'=>$host.'/onUnpublish'.$debug.';',//当客户端停止发布流时{"action": "on_unpublish","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","stream": "livestream"}
-                'on_play'=>$host.'/onPlay'.$debug.';',//当客户端开始播放流时{"action": "on_play","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","stream": "livestream","pageUrl": "http://www.test.com/live.html"}
-                'on_stop'=>$host.'/onStop'.$debug.';',//当客户端停止播放时 停止播放可能不会关闭连接，还能再继续播放。{"action": "on_stop","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","stream": "livestream"}
-                'on_dvr'=>$host.'/onDvr'.$debug.';',//当切片生成时{"action": "on_dvr","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","stream": "livestream","cwd": "/usr/local/srs","file": "./objs/nginx/html/live/livestream.1420254068776.flv"}
-                'on_hls'=>$host.'/onHls'.$debug.';',//{"action": "on_hls","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","stream": "livestream","duration": 9.36, // in seconds"cwd": "/usr/local/srs","file": "./objs/nginx/html/live/livestream/2015-04-23/01/476584165.ts","url": "live/livestream/2015-04-23/01/476584165.ts","m3u8": "./objs/nginx/html/live/livestream/live.m3u8","m3u8_url": "live/livestream/live.m3u8","seq_no": 100}
-                'on_hls_notify'=>$host.'/onHlsNotify'.$debug.';',//当切片生成时，回调这个url，使用GET回调
+                'on_connect'=>$host.'/onConnect;',//客户端连接到指定的vhost和app时 {"action": "on_connect","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","tcUrl": "rtmp://video.test.com/live?key=d2fa801d08e3f90ed1e1670e6e52651a", "pageUrl": "http://www.test.com/live.html"}
+                'on_close'=>$host.'/onClose;',//关闭连接，或者SRS主动关闭连接 {"action": "on_close", "client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","send_bytes": 10240, "recv_bytes": 10240}
+                'on_publish'=>$host.'/onPublish;',//当客户端发布流时  {"action": "on_publish","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","stream": "livestream" }
+                'on_unpublish'=>$host.'/onUnpublish;',//当客户端停止发布流时{"action": "on_unpublish","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","stream": "livestream"}
+                'on_play'=>$host.'/onPlay;',//当客户端开始播放流时{"action": "on_play","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","stream": "livestream","pageUrl": "http://www.test.com/live.html"}
+                'on_stop'=>$host.'/onStop;',//当客户端停止播放时 停止播放可能不会关闭连接，还能再继续播放。{"action": "on_stop","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","stream": "livestream"}
+                'on_dvr'=>$host.'/onDvr;',//当切片生成时{"action": "on_dvr","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","stream": "livestream","cwd": "/usr/local/srs","file": "./objs/nginx/html/live/livestream.1420254068776.flv"}
+                'on_hls'=>$host.'/onHls;',//{"action": "on_hls","client_id": 1985,"ip": "192.168.1.10", "vhost": "video.test.com", "app": "live","stream": "livestream","duration": 9.36, // in seconds"cwd": "/usr/local/srs","file": "./objs/nginx/html/live/livestream/2015-04-23/01/476584165.ts","url": "live/livestream/2015-04-23/01/476584165.ts","m3u8": "./objs/nginx/html/live/livestream/live.m3u8","m3u8_url": "live/livestream/live.m3u8","seq_no": 100}
+                'on_hls_notify'=>$host.'/onHlsNotify;',//当切片生成时，回调这个url，使用GET回调
             ],
             'http_remux'=>[//HTTP FLV
                 'enabled'=>'off;',//是否启用
